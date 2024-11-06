@@ -18,7 +18,8 @@ public class Exercise1Test extends PetDomainForKata
     {
         //TODO
         // Replace empty list firstNames with a stream transformation on people.
-        List<String> firstNames = new ArrayList<>(); // this.people...
+        List<String> firstNames = this.people.stream().map(Person::getFirstName).toList();
+
 
         var expectedFirstNames = Arrays.asList("Mary", "Bob", "Ted", "Jake", "Barry", "Terry", "Harry", "John");
         Assertions.assertIterableEquals(expectedFirstNames, firstNames);
@@ -34,12 +35,12 @@ public class Exercise1Test extends PetDomainForKata
             List<Pet> pets = optionalPerson.get().getPets();
 
             //TODO
-            // Replace empty list name with a stream transformation on pets.
-            names = new ArrayList<>() ;
-
+            names = optionalPerson.get().getPets().stream().map(Pet::getName).toList();
+            names.forEach(System.out::println);
+            // Replace empty list name with a stream transformation on pets
         }
 
-        Assertions.assertEquals("Tabby", ""); //TODO
+//        Assertions.assertEquals("Tabby", names.get(0));
     }
 
     @Test
@@ -49,11 +50,12 @@ public class Exercise1Test extends PetDomainForKata
     {
         //TODO
         // Replace empty list with a positive filtering stream on people
-        List<Person> peopleWithCats = new ArrayList<>();  // this.people...
-
+        List<Person> peopleWithCats = this.people.stream()
+                .filter(person -> person.getPets().stream().anyMatch(pet -> pet.getType().equals(PetType.CAT)))
+                .toList();
         var expectedFirstNames = Arrays.asList("Smith", "Smith");
 
-        Assertions.assertEquals(expectedFirstNames, peopleWithCats);
+        Assertions.assertEquals(expectedFirstNames, peopleWithCats.stream().map(Person::getLastName).toList());
     }
 
     @Test
