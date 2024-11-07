@@ -63,14 +63,11 @@ public class  Exercise4Test extends PetDomainForKata
         Assertions.assertEquals(stats.getCount(), 9);
 
 
-        //TODO
         // Replace by correct stream
         // All age > 0
         Assertions.assertTrue(petAges.stream().allMatch(age -> age > 0));
-        //TODO
         // No one ages == 0
         Assertions.assertFalse(petAges.stream().anyMatch(age -> age == 0));
-        //TODO
         // No one age < 0
         Assertions.assertTrue(petAges.stream().noneMatch(age -> age < 0));
     }
@@ -80,15 +77,13 @@ public class  Exercise4Test extends PetDomainForKata
     @DisplayName("bobSmithsPetNamesAsString - 🐱 🐶")
     public void bobSmithsPetNamesAsString()
     {
-        Assertions.fail("Refactor to stream. Don't forget to comment this out or delete it when you are done.");
-
-        //TODO
         // find Bob Smith
-        Person person = new Person("una", "persona");
+        Person person = this.getPersonNamed("Bob Smith").orElse(new Person("Una", "Persona"));
 
-        //TODO
         // get Bob Smith's pets' names
-        String names = "";
+        String names = person.getPets().stream()
+                .map(Pet::getName)
+                .collect(Collectors.joining(" & "));
         Assertions.assertEquals("Dolly & Spot", names);
     }
 
@@ -96,11 +91,11 @@ public class  Exercise4Test extends PetDomainForKata
     @Tag("KATA")
     public void immutablePetCountsByEmoji()
     {
-        Assertions.fail("Refactor to stream. Don't forget to comment this out or delete it when you are done.");
-
-        //TODO
         // Unmodificable map of counts
-        Map<String, Long> countsByEmoji = new HashMap<>();
+        Map<String, Long> countsByEmoji = this.people.stream()
+                .flatMap(person -> person.getPets().stream())
+                .map(Pet::getType)
+                .collect(Collectors.groupingBy(petType -> petType .toString(), Collectors.counting()));
 
         Assertions.assertEquals(
                 Map.of("🐱", 2L, "🐶", 2L, "🐹", 2L, "🐍", 1L, "🐢", 1L, "🐦", 1L),
