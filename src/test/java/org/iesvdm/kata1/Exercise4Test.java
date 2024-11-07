@@ -25,7 +25,7 @@ public class  Exercise4Test extends PetDomainForKata
                 .map(Person::getPets)
                 .flatMap(Collection::stream)
                 .map(Pet::getAge)
-                .collect(Collectors.toList());
+                .toList();
 
         var uniqueAges = Set.copyOf(petAges);
 
@@ -95,7 +95,7 @@ public class  Exercise4Test extends PetDomainForKata
         Map<String, Long> countsByEmoji = this.people.stream()
                 .flatMap(person -> person.getPets().stream())
                 .map(Pet::getType)
-                .collect(Collectors.groupingBy(petType -> petType .toString(), Collectors.counting()));
+                .collect(Collectors.groupingBy(PetType::toString, Collectors.counting()));
 
         Assertions.assertEquals(
                 Map.of("🐱", 2L, "🐶", 2L, "🐹", 2L, "🐍", 1L, "🐢", 1L, "🐦", 1L),
