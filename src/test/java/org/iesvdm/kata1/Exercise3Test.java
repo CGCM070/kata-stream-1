@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 
 public class Exercise3Test extends PetDomainForKata
@@ -14,29 +18,39 @@ public class Exercise3Test extends PetDomainForKata
     @Tag("KATA")
     public void getCountsByPetEmojis()
     {
-        //TODO
-        // Obtain petTypes from people
-        List<PetType> petTypes = new ArrayList<>();
 
-        // Do you recognize this pattern? Can you simplify it using Java Streams?
+        // Obtain petTypes from people
+
+        List<PetType> petTypes =  this.people.stream()
+                .map(Person::getPets)
+                .flatMap(Collection::stream)
+                .map(Pet::getType)
+                .toList();
+
+
+
         Map<String, Long> petEmojiCounts = new HashMap<>();
-        for (PetType petType : petTypes)
-        {
-            String petEmoji = petType.toString();
-            Long count = petEmojiCounts.get(petEmoji);
-            if (count == null)
-            {
-                count = 0L;
-            }
-            petEmojiCounts.put(petEmoji, count + 1L);
-        }
+//        for (PetType petType : petTypes)
+//        {
+//            String petEmoji = petType.toString();
+//            Long count = petEmojiCounts.get(petEmoji);
+//            if (count == null)
+//            {
+//                count = 0L;
+//            }
+//            petEmojiCounts.put(petEmoji, count + 1L);
+//        }
+            petEmojiCounts = petTypes.stream()
+                    .collect(Collectors.groupingBy(PetType::toString, counting()));
+
 
         var expectedMap = Map.of("🐱", 2L, "🐶", 2L, "🐹", 2L, "🐍", 1L, "🐢", 1L, "🐦", 1L);
         Assertions.assertEquals(expectedMap, petEmojiCounts);
 
-        //TODO
+
         // Replace by a stream the previous pattern
-        Map<String, Long> petEmojiCounts2 = new HashMap<>();
+        Map<String, Long> petEmojiCounts2 = petTypes.stream()
+                .collect(groupingBy(PetType::toString, counting()));
         Assertions.assertEquals(expectedMap, petEmojiCounts2);
 
     }
@@ -62,9 +76,9 @@ public class Exercise3Test extends PetDomainForKata
         Assertions.assertEquals(3, lastNamesToPeople.get("Smith").size());
 
 
-        //TODO
         // Replace by stream the previous pattern
-        Map<String, List<Person>> lastNamesToPeople2 = new HashMap<>();
+        Map<String, List<Person>> lastNamesToPeople2 = this.people.stream()
+                .collect(Collectors.groupingBy(Person::getLastName));
         Assertions.assertEquals(3, lastNamesToPeople2.get("Smith").size());
     }
 

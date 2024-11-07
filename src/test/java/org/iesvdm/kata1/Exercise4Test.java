@@ -35,6 +35,7 @@ public class  Exercise4Test extends PetDomainForKata
         // Replace by stream
         // IntSummaryStatistics is a class in JDK 8 use it over petAges
         var stats = new IntSummaryStatistics();
+        
 
         //TODO
         // Replace 0 by stream over petAges

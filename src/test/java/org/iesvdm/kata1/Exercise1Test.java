@@ -37,7 +37,7 @@ public class Exercise1Test extends PetDomainForKata {
             // Replace empty list name with a stream transformation on pets
         }
 
-//        Assertions.assertEquals("Tabby", names.get(0));
+        Assertions.assertEquals("Tabby", names.getFirst());
     }
 
     @Test
@@ -49,8 +49,8 @@ public class Exercise1Test extends PetDomainForKata {
         List<Person> peopleWithCats = this.people.stream()
                 .filter(person -> person.getPets().stream()
                                 .anyMatch(pet -> pet.getType()
-                                .equals(PetType.CAT)))
-                                .toList();
+                                .equals(PetType.CAT))
+                                ).toList();
         var expectedFirstNames = Arrays.asList("Smith", "Smith");
 
         Assertions.assertEquals(expectedFirstNames, peopleWithCats.stream().map(Person::getLastName).toList());
