@@ -111,11 +111,18 @@ public class  Exercise4Test extends PetDomainForKata
     @DisplayName("topThreePets - 🐱 🐶 🐹")
     public void topThreePets()
     {
-        Assertions.fail("Refactor to stream. Don't forget to comment this out or delete it when you are done.");
 
-        //TODO
+
         // Obtain three top pets
         var favorites = new ArrayList<>();
+//        var favorites = this.people.stream()
+//                .flatMap(person -> person.getPets().stream())
+//                .map(Pet::getType)
+//                .collect(Collectors.groupingBy(PetType::toString, Collectors.counting()))
+//                .entrySet().stream()
+//                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+//                .limit(3)
+//                .toList();
 
         Assertions.assertEquals(3, favorites.size());
 
@@ -129,28 +136,29 @@ public class  Exercise4Test extends PetDomainForKata
     @Tag("KATA")
     public void getMedianOfPetAges()
     {
-        Assertions.fail("Refactor to stream. Don't forget to comment this out or delete it when you are done.");
-
-        //TODO
         // Obtain pet ages
-        var petAges = new ArrayList<Integer>();
+        var petAges = this.people.stream()
+                .map(Person::getPets)
+                .flatMap(Collection::stream)
+                .map(Pet::getAge)
+                .toList();
 
-        //TODO
+
         // sort pet ages
-        var sortedPetAges = new ArrayList<Integer>();
+        var sortedPetAges = petAges.stream()
+                .sorted()
+                .toList();
 
         double median;
         if (0 == sortedPetAges.size() % 2)
         {
-            //TODO
-            //
             // The median of a list of even numbers is the average of the two middle items
-            median = 0.0;
+            median = sortedPetAges.get(sortedPetAges.size() / 2).doubleValue();
         }
         else
         {
             // The median of a list of odd numbers is the middle item
-            median = sortedPetAges.get(abs(sortedPetAges.size() / 2)).doubleValue();
+            median = sortedPetAges.get(sortedPetAges.size() / 2).doubleValue();
         }
 
         Assertions.assertEquals(2.0, median, 0.0);
