@@ -20,43 +20,59 @@ public class  Exercise4Test extends PetDomainForKata
     @Tag("KATA")
     public void getAgeStatisticsOfPets()
     {
-        Assertions.fail("Refactor to stream. Don't forget to comment this out or delete it when you are done.");
-
-        //TODO
         // Replace by stream of petAges
-        var petAges = List.of(1);
+        var petAges = this.people.stream()
+                .map(Person::getPets)
+                .flatMap(Collection::stream)
+                .map(Pet::getAge)
+                .collect(Collectors.toList());
 
         var uniqueAges = Set.copyOf(petAges);
 
         var expectedSet = Set.of(1, 2, 3, 4);
         Assertions.assertEquals(expectedSet, uniqueAges);
 
-        //TODO
-        // Replace by stream
+
         // IntSummaryStatistics is a class in JDK 8 use it over petAges
-        var stats = new IntSummaryStatistics();
-        
 
-        //TODO
+        /**
+         Devuelve si algún elemento de este stream coincide con el predicado proporcionado.
+         Puede que no evalúe el predicado en todos los elementos si no es necesario para determinar el resultado.
+         Si el stream está vacío, se devuelve `false` y el predicado no se evalúa.
+         Esta es una operación terminal de cortocircuito.
+         Parámetros:
+         - `predicate`: un predicado sin interferencias y sin estado para aplicar a los elementos de este stream.
+         Devuelve:
+         - `true` si algún elemento del stream coincide con el predicado proporcionado, de lo contrario `false`.
+         Nota de la API:
+         Este método evalúa la cuantificación existencial del predicado sobre los elementos del stream (para algún x P(x)).
+         *
+         */
+        var stats = petAges.stream().mapToInt(Integer::intValue).summaryStatistics();
+        System.out.println(stats);
+
+
+
+
+
         // Replace 0 by stream over petAges
-        Assertions.assertEquals(stats.getMin(), 0);
-        Assertions.assertEquals(stats.getMax(), 0);
-        Assertions.assertEquals(stats.getSum(), 0);
-        Assertions.assertEquals(stats.getAverage(), 0.0, 0.0);
-        Assertions.assertEquals(stats.getCount(), 0);
-
+        Assertions.assertEquals(stats.getMin(), 1);
+        Assertions.assertEquals(stats.getMax(), 4);
+        Assertions.assertEquals(stats.getSum(), 17);
+        Assertions.assertEquals(stats.getAverage(), 1.8888888888888888, 0.0);
+        Assertions.assertEquals(stats.getCount(), 9);
 
 
         //TODO
         // Replace by correct stream
         // All age > 0
-        Assertions.assertTrue(false);
+        Assertions.assertTrue(petAges.stream().allMatch(age -> age > 0));
         //TODO
         // No one ages == 0
-        Assertions.assertFalse(true);
+        Assertions.assertFalse(petAges.stream().anyMatch(age -> age == 0));
         //TODO
         // No one age < 0
-        Assertions.assertTrue(false);
+        Assertions.assertTrue(petAges.stream().noneMatch(age -> age < 0));
     }
 
     @Test

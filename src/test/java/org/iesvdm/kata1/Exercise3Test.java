@@ -111,9 +111,11 @@ public class Exercise3Test extends PetDomainForKata
         Assertions.assertEquals(1, peopleByPetType.get(PetType.BIRD).size());
         Assertions.assertEquals(1, peopleByPetType.get(PetType.SNAKE).size());
 
-        //TODO
+
         // Replace by stream
-        Map<PetType, Set<Person>> peopleByPetType2 = new HashMap<>();
+        var peopleByPetType2 = this.people.stream()
+                .flatMap(person -> person.getPets().stream())
+                .collect(Collectors.groupingBy(Pet::getType, Collectors.toSet()));
 
         Assertions.assertEquals(2, peopleByPetType2.get(PetType.CAT).size());
         Assertions.assertEquals(2, peopleByPetType2.get(PetType.DOG).size());
@@ -127,9 +129,13 @@ public class Exercise3Test extends PetDomainForKata
     @Tag("KATA")
     public void getPeopleByTheirPetEmojis()
     {
-        //TODO
+
         // Replace by stream
-        Map<String, Set<Person>> petTypesToPeople = new HashMap<>();
+        var  petTypesToPeople = this.people.stream()
+                .flatMap(person -> person.getPets().stream())
+                .map(Pet::getType)
+                .map(PetType::toString)
+                .collect(Collectors.groupingBy(petType -> petType, Collectors.toSet()));
 
         Assertions.assertEquals(2, petTypesToPeople.get("🐱").size());
         Assertions.assertEquals(2, petTypesToPeople.get("🐶").size());
